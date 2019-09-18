@@ -42,22 +42,20 @@ class DoublyLinkedList:
 
   def __len__(self):
     return self.length
-  
-  """Wraps the given value in a ListNode and inserts it 
-  as the new head of the list. Don't forget to handle 
-  the old head node's previous pointer accordingly."""
+
   def add_to_head(self, value):
     if self.length == 0:
       node = ListNode(value, None, None)
       self.head = node
       self.tail = node
       self.length += 1
+      return node
     elif self.length > 0:
       node = ListNode(value, None, self.head)
       self.head.prev = node
       self.head = node
       self.length +=1
-
+      return node
   
   """Removes the List's current head node, making the
   current head's next node the new head of the List.
@@ -120,6 +118,13 @@ class DoublyLinkedList:
   def move_to_front(self, node):
     if self.length <= 1 or self.head == node:
       pass
+    elif self.length > 1 and self.tail == node:
+      self.tail = self.tail.prev
+      self.tail.next = None
+      node.prev = None
+      node.next = self.head 
+      self.head.prev = node
+      self.head = node
     else:
       self.head.prev = node
       node.prev = None
@@ -131,6 +136,13 @@ class DoublyLinkedList:
   def move_to_end(self, node):
     if self.length <= 1 or self.tail == node:
       pass
+    elif self.length > 1 and self.head == node:
+      self.head = self.head.next
+      self.head.prev = None
+      node.next = None
+      node.prev = self.tail 
+      self.tail.next = node
+      self.tail = node
     else:
       self.tail.next = node
       node.next = None

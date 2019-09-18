@@ -137,6 +137,13 @@ class DoublyLinkedList:
   def move_to_end(self, node):
     if self.length <= 1 or self.tail == node:
       pass
+    elif self.length > 1 and self.head == node:
+      self.head = self.head.next
+      self.head.prev = None
+      node.next = None
+      node.prev = self.tail 
+      self.tail.next = node
+      self.tail = node
     else:
       self.tail.next = node
       node.next = None
