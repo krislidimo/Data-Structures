@@ -50,12 +50,13 @@ class DoublyLinkedList:
       self.head = node
       self.tail = node
       self.length += 1
+      return node
     elif self.length > 0:
       node = ListNode(key, value, None, self.head)
       self.head.prev = node
       self.head = node
       self.length +=1
-
+      return node
   
   """Removes the List's current head node, making the
   current head's next node the new head of the List.
@@ -118,6 +119,13 @@ class DoublyLinkedList:
   def move_to_front(self, node):
     if self.length <= 1 or self.head == node:
       pass
+    elif self.length > 1 and self.tail == node:
+      self.tail = self.tail.prev
+      self.tail.next = None
+      node.prev = None
+      node.next = self.head 
+      self.head.prev = node
+      self.head = node
     else:
       self.head.prev = node
       node.prev = None
