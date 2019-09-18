@@ -2,8 +2,6 @@ import sys
 sys.path.append('../doubly_linked_list')
 from doubly_linked_list import DoublyLinkedList
 
-
-
 class LRUCache:
   """
   Our LRUCache class keeps track of the max number of nodes it
@@ -29,12 +27,8 @@ class LRUCache:
     if key not in self.storage.keys():
       return None
     else:
-      currentNode = self.dll.head
-      while self.dll.head is not None and self.dll.head.key != key:
-        currentNode = currentNode.next
-      self.dll.move_to_front(currentNode)
-
-      return self.storage.key
+      self.dll.move_to_front(self.storage[key])
+      return self.storage[key].value
   """
   Adds the given key-value pair to the cache. The newly-
   added pair should be considered the most-recently used
@@ -47,17 +41,18 @@ class LRUCache:
   """
   def set(self, key, value):
     if key not in self.storage.keys(): # key dosn't exist, set new key
-      self.storage.update({key:value})
-      self.dll.add_to_head(key, value)
-    else: # key exist, update key
-      if self.storage[key] != value:
-        self.storage[key] = value;
-
-        currentNode = self.dll.head
-        while currentNode is not None and self.dll.head.key != key:
-          currentNode = currentNode.next
-        self.dll.move_to_front(currentNode)
+      node = self.dll.add_to_head(key,value)
+      self.storage.update({key: node})
+      self.size += 1
+    else: # key exist & value differes, update key
+      if self.storage[key].value != value:
+        self.storage[key].value = value;
+        self.dll.move_to_front(self.storage[key])
 
     if self.size > self.limit:
       del self.storage[self.dll.tail.key]
       self.dll.remove_from_tail()
+      self.size -= 1
+
+  def __str__(self):
+    return f"Size: {self.size}\nDictionary: {self.storage}"
