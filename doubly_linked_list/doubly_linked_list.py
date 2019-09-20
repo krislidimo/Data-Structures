@@ -42,46 +42,147 @@ class DoublyLinkedList:
 
   def __len__(self):
     return self.length
-  
-  """Wraps the given value in a ListNode and inserts it 
-  as the new head of the list. Don't forget to handle 
-  the old head node's previous pointer accordingly."""
+
   def add_to_head(self, value):
-    pass
+    if self.length == 0:
+      node = ListNode(value, None, None)
+      self.head = node
+      self.tail = node
+      self.length += 1
+      return node
+    elif self.length > 0:
+      node = ListNode(value, None, self.head)
+      self.head.prev = node
+      self.head = node
+      self.length +=1
+      return node
   
   """Removes the List's current head node, making the
   current head's next node the new head of the List.
   Returns the value of the removed Node."""
   def remove_from_head(self):
-    pass
+    removedNodeValue = None
 
-   """Wraps the given value in a ListNode and inserts it 
+    if self.length == 0:
+      pass
+    elif self.length == 1:
+      removedNodeValue = self.head.value
+      self.head = None
+      self.tail = None
+      self.length = 0
+    else:
+      removedNodeValue = self.head.value
+      self.head = self.head.next
+      self.head.prev = None
+      self.length -= 1
+
+    return removedNodeValue
+
+  """Wraps the given value in a ListNode and inserts it 
   as the new tail of the list. Don't forget to handle 
   the old tail node's next pointer accordingly."""
   def add_to_tail(self, value):
-    pass
+    if self.length == 0:
+      node = ListNode(value, None, None)
+      self.head = node
+      self.tail = node
+      self.length += 1
+    elif self.length > 0:
+      node = ListNode(value, self.tail, None)
+      self.tail.next = node
+      self.tail = node
+      self.length +=1
 
   """Removes the List's current tail node, making the 
   current tail's previous node the new tail of the List.
   Returns the value of the removed Node."""
   def remove_from_tail(self):
-    pass
+    removedNodeValue = self.tail.value
+
+    if self.length == 0:
+      pass
+    elif self.length == 1:
+      self.head = None
+      self.tail = None
+      self.length = 0
+    else:
+      self.tail = self.tail.prev
+      self.tail.next = None
+      self.length -= 1
+
+    return removedNodeValue
+
 
   """Removes the input node from its current spot in the 
   List and inserts it as the new head node of the List."""
   def move_to_front(self, node):
-    pass
+    if self.length <= 1 or self.head == node:
+      pass
+    elif self.length > 1 and self.tail == node:
+      self.tail = self.tail.prev
+      self.tail.next = None
+      node.prev = None
+      node.next = self.head 
+      self.head.prev = node
+      self.head = node
+    else:
+      self.head.prev = node
+      node.prev = None
+      node.next = self.head
+      self.head = node
 
   """Removes the input node from its current spot in the 
   List and inserts it as the new tail node of the List."""
   def move_to_end(self, node):
-    pass
+    if self.length <= 1 or self.tail == node:
+      pass
+    elif self.length > 1 and self.head == node:
+      self.head = self.head.next
+      self.head.prev = None
+      node.next = None
+      node.prev = self.tail 
+      self.tail.next = node
+      self.tail = node
+    else:
+      self.tail.next = node
+      node.next = None
+      node.prev = self.tail
+      self.tail = node
 
   """Removes a node from the list and handles cases where
   the node was the head or the tail"""
   def delete(self, node):
-    pass
+    if self.length == 1:
+      self.head = None
+      self.tail = None
+    elif self.head == node:
+      self.head = node.next
+      self.head.prev = None
+    elif self.tail == node:
+      self.tail = node.prev
+      self.tail.next = None
+    else: 
+      node.next.prev = node.prev
+      node.prev.next = node.next
+    node.next = None
+    node.prev = None
+    self.length -= 1
     
   """Returns the highest value currently in the list"""
   def get_max(self):
-    pass
+    maxValue = None
+
+    if self.length == 0:
+      pass
+    elif self.length == 1:
+      maxValue = self.head.value
+    else:
+      maxValue = self.head.value
+      temp = self.head.next
+      while temp is not None:
+        if temp.value > maxValue:
+          maxValue = temp.value
+        temp = temp.next
+
+    return maxValue
+
